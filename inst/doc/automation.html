@@ -7,22 +7,23 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta name="author" content="Krystian Igras" />
 
-<meta name="date" content="2018-12-12" />
+<meta name="date" content="2019-09-05" />
 
-<title>Automate you work</title>
+<title>Automate your work</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -32,16 +33,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -50,9 +51,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -83,7 +84,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -271,6 +294,9 @@ code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
+
+
+
 </head>
 
 <body>
@@ -278,9 +304,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 
-<h1 class="title toc-ignore">Automate you work</h1>
-<h4 class="author"><em>Krystian Igras</em></h4>
-<h4 class="date"><em>2018-12-12</em></h4>
+<h1 class="title toc-ignore">Automate your work</h1>
+<h4 class="author">Krystian Igras</h4>
+<h4 class="date">2019-09-05</h4>
 
 
 
@@ -291,40 +317,40 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2>Local transition and effect</h2>
 <p>In previous sections we learned how to specify parameters for the effect and transition of single variable. Let’s name them <strong>local</strong> parameters.</p>
 <p>A quick example you can see below:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(xspliner)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(randomForest)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">rf_iris &lt;-<span class="st"> </span><span class="kw">randomForest</span>(Petal.Width <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">  </span><span class="kw">xs</span>(Petal.Length, <span class="dt">effect =</span> <span class="kw">list</span>(<span class="dt">grid.resolution =</span> <span class="dv">100</span>), <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">bs =</span> <span class="st">&quot;cr&quot;</span>)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">  </span><span class="kw">xf</span>(Species, <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">stat =</span> <span class="st">&quot;loglikelihood&quot;</span>, <span class="dt">value =</span> <span class="dv">4</span>)),</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">  <span class="dt">model =</span> rf_iris)</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(xspliner)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(randomForest)</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a>rf_iris &lt;-<span class="st"> </span><span class="kw">randomForest</span>(Petal.Width <span class="op">~</span><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="st">  </span><span class="kw">xs</span>(Petal.Length, <span class="dt">effect =</span> <span class="kw">list</span>(<span class="dt">grid.resolution =</span> <span class="dv">100</span>), <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">bs =</span> <span class="st">&quot;cr&quot;</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="st">  </span><span class="kw">xf</span>(Species, <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">stat =</span> <span class="st">&quot;loglikelihood&quot;</span>, <span class="dt">value =</span> <span class="dv">4</span>)),</span>
+<span id="cb1-9"><a href="#cb1-9"></a>  <span class="dt">model =</span> rf_iris)</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ Sepal.Length + xs(Petal.Length) + 
+## stats::glm(formula = Petal.Width ~ Sepal.Length + xs(Petal.Length) + 
 ##     xf(Species), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.66915  -0.07150  -0.02611   0.10336   0.45972  
+## -0.66053  -0.07368  -0.02404   0.10354   0.45290  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.29722    0.21258  -6.102 9.06e-09 ***
-## Sepal.Length           0.03266    0.03549   0.920    0.359    
-## xs(Petal.Length)       1.85065    0.35508   5.212 6.31e-07 ***
-## xf(Species)versicolor  0.04001    0.17915   0.223    0.824    
-## xf(Species)virginica   0.34864    0.23755   1.468    0.144    
+## (Intercept)           -1.24972    0.20596  -6.068 1.08e-08 ***
+## Sepal.Length           0.03548    0.03517   1.009    0.315    
+## xs(Petal.Length)       1.79291    0.34404   5.211 6.33e-07 ***
+## xf(Species)versicolor  0.04237    0.17873   0.237    0.813    
+## xf(Species)virginica   0.36131    0.23522   1.536    0.127    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03100874)
+## (Dispersion parameter for gaussian family taken to be 0.03100998)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4963  on 145  degrees of freedom
-## AIC: -88.427
+## Residual deviance:  4.4964  on 145  degrees of freedom
+## AIC: -88.421
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>When the black box model is based on higher amount of variables it can be problematic to specify local parameters for each predictor. Also formula becomes large and hard to read.</p>
@@ -333,75 +359,75 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2>Global transition and effect</h2>
 <p>Its more common that we use similar configuration for each variable, as it’s simple and allows us to build and experiment faster. To do this you can specify <code>xs_opts</code> and <code>xf_opts</code> of <code>xspline</code> function. Let’s name them <strong>global</strong> parameters.</p>
 <p>Each of global parameters can specify effect and transition, that should be used for xs and xf transformations respectively. Then you just need to use base xs and xf symbols without parameters:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="st">  </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">  </span><span class="kw">xf</span>(Species),</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">model =</span> rf_iris, </a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="dt">xs_opts =</span> <span class="kw">list</span>(<span class="dt">effect =</span> <span class="kw">list</span>(<span class="dt">grid.resolution =</span> <span class="dv">100</span>), <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">bs =</span> <span class="st">&quot;cr&quot;</span>)),</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="dt">xf_opts =</span> <span class="kw">list</span>(<span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">stat =</span> <span class="st">&quot;loglikelihood&quot;</span>, <span class="dt">value =</span> <span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span>Sepal.Length <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="st">  </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span><span class="kw">xf</span>(Species),</span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="dt">model =</span> rf_iris, </span>
+<span id="cb3-6"><a href="#cb3-6"></a>  <span class="dt">xs_opts =</span> <span class="kw">list</span>(<span class="dt">effect =</span> <span class="kw">list</span>(<span class="dt">grid.resolution =</span> <span class="dv">100</span>), <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">bs =</span> <span class="st">&quot;cr&quot;</span>)),</span>
+<span id="cb3-7"><a href="#cb3-7"></a>  <span class="dt">xf_opts =</span> <span class="kw">list</span>(<span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">stat =</span> <span class="st">&quot;loglikelihood&quot;</span>, <span class="dt">value =</span> <span class="dv">4</span>))</span>
+<span id="cb3-8"><a href="#cb3-8"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ Sepal.Length + xs(Petal.Length) + 
+## stats::glm(formula = Petal.Width ~ Sepal.Length + xs(Petal.Length) + 
 ##     xf(Species), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.66915  -0.07150  -0.02611   0.10336   0.45972  
+## -0.66053  -0.07368  -0.02404   0.10354   0.45290  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.29722    0.21258  -6.102 9.06e-09 ***
-## Sepal.Length           0.03266    0.03549   0.920    0.359    
-## xs(Petal.Length)       1.85065    0.35508   5.212 6.31e-07 ***
-## xf(Species)versicolor  0.04001    0.17915   0.223    0.824    
-## xf(Species)virginica   0.34864    0.23755   1.468    0.144    
+## (Intercept)           -1.24972    0.20596  -6.068 1.08e-08 ***
+## Sepal.Length           0.03548    0.03517   1.009    0.315    
+## xs(Petal.Length)       1.79291    0.34404   5.211 6.33e-07 ***
+## xf(Species)versicolor  0.04237    0.17873   0.237    0.813    
+## xf(Species)virginica   0.36131    0.23522   1.536    0.127    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03100874)
+## (Dispersion parameter for gaussian family taken to be 0.03100998)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4963  on 145  degrees of freedom
-## AIC: -88.427
+## Residual deviance:  4.4964  on 145  degrees of freedom
+## AIC: -88.421
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>But still you can specify local parameters that override the global ones.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">xs</span>(Sepal.Length, <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">k =</span> <span class="dv">10</span>)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw">xf</span>(Species),</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="dt">model =</span> rf_iris, </a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="dt">xs_opts =</span> <span class="kw">list</span>(<span class="dt">effect =</span> <span class="kw">list</span>(<span class="dt">grid.resolution =</span> <span class="dv">100</span>), <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">bs =</span> <span class="st">&quot;cr&quot;</span>)),</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="dt">xf_opts =</span> <span class="kw">list</span>(<span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">stat =</span> <span class="st">&quot;loglikelihood&quot;</span>, <span class="dt">value =</span> <span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">xs</span>(Sepal.Length, <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">k =</span> <span class="dv">10</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span><span class="kw">xs</span>(Petal.Length) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="st">  </span><span class="kw">xf</span>(Species),</span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="dt">model =</span> rf_iris, </span>
+<span id="cb5-6"><a href="#cb5-6"></a>  <span class="dt">xs_opts =</span> <span class="kw">list</span>(<span class="dt">effect =</span> <span class="kw">list</span>(<span class="dt">grid.resolution =</span> <span class="dv">100</span>), <span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">bs =</span> <span class="st">&quot;cr&quot;</span>)),</span>
+<span id="cb5-7"><a href="#cb5-7"></a>  <span class="dt">xf_opts =</span> <span class="kw">list</span>(<span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">stat =</span> <span class="st">&quot;loglikelihood&quot;</span>, <span class="dt">value =</span> <span class="dv">4</span>))</span>
+<span id="cb5-8"><a href="#cb5-8"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+## stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 ##     xf(Species), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67393  -0.07675  -0.03086   0.09725   0.46086  
+## -0.66421  -0.07825  -0.02653   0.09558   0.45557  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.40641    0.24939  -5.639 8.64e-08 ***
-## xs(Sepal.Length)       0.28291    0.29806   0.949    0.344    
-## xs(Petal.Length)       1.80983    0.37825   4.785 4.17e-06 ***
-## xf(Species)versicolor  0.05159    0.18386   0.281    0.779    
-## xf(Species)virginica   0.36727    0.24519   1.498    0.136    
+## (Intercept)            -1.3846     0.2503  -5.531 1.44e-07 ***
+## xs(Sepal.Length)        0.3313     0.2993   1.107    0.270    
+## xs(Petal.Length)        1.7366     0.3643   4.766 4.51e-06 ***
+## xf(Species)versicolor   0.0596     0.1826   0.326    0.745    
+## xf(Species)virginica    0.3876     0.2418   1.603    0.111    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.03099724)
+## (Dispersion parameter for gaussian family taken to be 0.03096597)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.4946  on 145  degrees of freedom
-## AIC: -88.482
+## Residual deviance:  4.4901  on 145  degrees of freedom
+## AIC: -88.634
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>In this case <code>last_evaluation</code> variable will be transformed with thin plate regression spline (<code>bs = &quot;tp&quot;</code> is default for <code>mgcv::s</code>) with basis dimension equal to <code>10</code>. At the same time <code>average_monthly_hours</code> will be transformed with cubic splines.</p>
@@ -410,7 +436,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="default-transition-and-effect" class="section level2">
 <h2>Default transition and effect</h2>
 <p>As you can see in project objects reference, you may find there <code>xs_opts_edfault</code> and <code>xf_opts_default</code> objects. These objects specify <strong>default</strong> parameters for <code>xs</code> and <code>xf</code> transformations.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">xs_opts_default</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>xs_opts_default</span></code></pre></div>
 <pre><code>## $effect
 ## $effect$type
 ## [1] &quot;pdp&quot;
@@ -422,7 +448,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ## 
 ## $transition$monotonic
 ## [1] &quot;not&quot;</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">xf_opts_default</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>xf_opts_default</span></code></pre></div>
 <pre><code>## $effect
 ## $effect$type
 ## [1] &quot;ice&quot;
@@ -448,70 +474,70 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2>Transform each formula predictor</h2>
 <p>If you want to transform each predictor of specified formula and not using xs and xf variables you can omit it using <code>consider</code> parameter for <code>xspline</code> function.</p>
 <p>Possible values are <code>&quot;specials&quot;</code> the default one and <code>&quot;all&quot;</code>. For automatic transformation of each variable without specifying <code>xs</code> and <code>xf</code> symbols just set <code>consider = &quot;all&quot;</code> and pass standard formula into <code>xspline</code> function:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length  <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species,</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">  <span class="dt">model =</span> rf_iris,</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">  <span class="dt">consider =</span> <span class="st">&quot;all&quot;</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">)</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length  <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species,</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="dt">model =</span> rf_iris,</span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="dt">consider =</span> <span class="st">&quot;all&quot;</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>)</span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+## stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 ##     xf(Species), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67652  -0.07571  -0.03050   0.09563   0.46918  
+## -0.66859  -0.07897  -0.02812   0.09748   0.46392  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.39649    0.25141  -5.555 1.29e-07 ***
-## xs(Sepal.Length)       0.31020    0.30086   1.031   0.3042    
-## xs(Petal.Length)       1.75429    0.37109   4.727 5.33e-06 ***
-## xf(Species)versicolor  0.08059    0.17954   0.449   0.6542    
-## xf(Species)virginica   0.40542    0.23986   1.690   0.0931 .  
+## (Intercept)           -1.38318    0.25357  -5.455 2.06e-07 ***
+## xs(Sepal.Length)       0.35122    0.30254   1.161   0.2476    
+## xs(Petal.Length)       1.70267    0.35924   4.740 5.06e-06 ***
+## xf(Species)versicolor  0.07783    0.17944   0.434   0.6651    
+## xf(Species)virginica   0.41267    0.23780   1.735   0.0848 .  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.0310788)
+## (Dispersion parameter for gaussian family taken to be 0.03103978)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5064  on 145  degrees of freedom
-## AIC: -88.088
+## Residual deviance:  4.5008  on 145  degrees of freedom
+## AIC: -88.277
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Then each predictor is transformed with xs and xf symbols and use of default parameters or global ones when specified.</p>
 <p><strong><code>xs</code> is used for integer and numeric variables - <code>xf</code> for factors.</strong></p>
 <p>By default xspline function tries to extract the data from model (<code>rf_model</code>) call and xspline’s <code>parent.frame()</code> environment then uses it to determine predictor types. So to be sure that variable types are sourced correctly a good practice here is to add data parameter, storing black box’s training data.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length  <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species,</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">  <span class="dt">model =</span> rf_iris,</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">  <span class="dt">data =</span> iris,</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">  <span class="dt">consider =</span> <span class="st">&quot;all&quot;</span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">)</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length  <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species,</span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="dt">model =</span> rf_iris,</span>
+<span id="cb14-3"><a href="#cb14-3"></a>  <span class="dt">data =</span> iris,</span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="dt">consider =</span> <span class="st">&quot;all&quot;</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+## stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 ##     xf(Species), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67652  -0.07571  -0.03050   0.09563   0.46918  
+## -0.66859  -0.07897  -0.02812   0.09748   0.46392  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.39649    0.25141  -5.555 1.29e-07 ***
-## xs(Sepal.Length)       0.31020    0.30086   1.031   0.3042    
-## xs(Petal.Length)       1.75429    0.37109   4.727 5.33e-06 ***
-## xf(Species)versicolor  0.08059    0.17954   0.449   0.6542    
-## xf(Species)virginica   0.40542    0.23986   1.690   0.0931 .  
+## (Intercept)           -1.38318    0.25357  -5.455 2.06e-07 ***
+## xs(Sepal.Length)       0.35122    0.30254   1.161   0.2476    
+## xs(Petal.Length)       1.70267    0.35924   4.740 5.06e-06 ***
+## xf(Species)versicolor  0.07783    0.17944   0.434   0.6651    
+## xf(Species)virginica   0.41267    0.23780   1.735   0.0848 .  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.0310788)
+## (Dispersion parameter for gaussian family taken to be 0.03103978)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5064  on 145  degrees of freedom
-## AIC: -88.088
+## Residual deviance:  4.5008  on 145  degrees of freedom
+## AIC: -88.277
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 </div>
@@ -520,51 +546,51 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>In some cases you may want to transform only quantitative or qualitative predictors. Looking into default parameters <code>xs_opts_default</code> and <code>xf_opts_default</code> we may find <code>alter</code> parameter for transition.</p>
 <p>The parameter is used to specify if predictor for which <code>xs</code> or <code>xf</code> was specified needs to be transformed or used as a bare variable in formula. You can specify it in the local or global transition parameter. In this case using the global one is more reasonable.</p>
 <p>So, in order to transform only continuous variables just set <code>alter = &quot;always&quot;</code> (what is default) for <code>xs_opts</code> and <code>alter = &quot;never&quot;</code> for <code>xf_opts</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species,</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">  <span class="dt">model =</span> rf_iris,</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">  <span class="dt">data =</span> iris,</a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">  <span class="dt">consider =</span> <span class="st">&quot;all&quot;</span>,</a>
-<a class="sourceLine" id="cb16-5" data-line-number="5">  <span class="dt">xf_opts =</span> <span class="kw">list</span>(<span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">alter =</span> <span class="st">&quot;never&quot;</span>))</a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">)</a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species,</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="dt">model =</span> rf_iris,</span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="dt">data =</span> iris,</span>
+<span id="cb16-4"><a href="#cb16-4"></a>  <span class="dt">consider =</span> <span class="st">&quot;all&quot;</span>,</span>
+<span id="cb16-5"><a href="#cb16-5"></a>  <span class="dt">xf_opts =</span> <span class="kw">list</span>(<span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">alter =</span> <span class="st">&quot;never&quot;</span>))</span>
+<span id="cb16-6"><a href="#cb16-6"></a>)</span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+## stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 ##     Species, family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67652  -0.07571  -0.03050   0.09563   0.46918  
+## -0.66859  -0.07897  -0.02812   0.09748   0.46392  
 ## 
 ## Coefficients:
 ##                   Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)       -1.39649    0.25141  -5.555 1.29e-07 ***
-## xs(Sepal.Length)   0.31020    0.30086   1.031   0.3042    
-## xs(Petal.Length)   1.75429    0.37109   4.727 5.33e-06 ***
-## Speciesversicolor  0.08059    0.17954   0.449   0.6542    
-## Speciesvirginica   0.40542    0.23986   1.690   0.0931 .  
+## (Intercept)       -1.38318    0.25357  -5.455 2.06e-07 ***
+## xs(Sepal.Length)   0.35122    0.30254   1.161   0.2476    
+## xs(Petal.Length)   1.70267    0.35924   4.740 5.06e-06 ***
+## Speciesversicolor  0.07783    0.17944   0.434   0.6651    
+## Speciesvirginica   0.41267    0.23780   1.735   0.0848 .  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.0310788)
+## (Dispersion parameter for gaussian family taken to be 0.03103978)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5064  on 145  degrees of freedom
-## AIC: -88.088
+## Residual deviance:  4.5008  on 145  degrees of freedom
+## AIC: -88.277
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>For transformation of factors only:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species,</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">  <span class="dt">model =</span> rf_iris,</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">  <span class="dt">data =</span> iris,</a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">  <span class="dt">consider =</span> <span class="st">&quot;all&quot;</span>,</a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">  <span class="dt">xs_opts =</span> <span class="kw">list</span>(<span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">alter =</span> <span class="st">&quot;never&quot;</span>))</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6">)</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Species,</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="dt">model =</span> rf_iris,</span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="dt">data =</span> iris,</span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="dt">consider =</span> <span class="st">&quot;all&quot;</span>,</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="dt">xs_opts =</span> <span class="kw">list</span>(<span class="dt">transition =</span> <span class="kw">list</span>(<span class="dt">alter =</span> <span class="st">&quot;never&quot;</span>))</span>
+<span id="cb18-6"><a href="#cb18-6"></a>)</span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ Sepal.Length + Petal.Length + xf(Species), 
-##     family = family, data = data)
+## stats::glm(formula = Petal.Width ~ Sepal.Length + Petal.Length + 
+##     xf(Species), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
@@ -578,7 +604,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 ## xf(Species)versicolor  0.432659   0.125048   3.460  0.00071 ***
 ## xf(Species)virginica   0.834121   0.173212   4.816 3.65e-06 ***
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for gaussian family taken to be 0.03249376)
 ## 
@@ -592,32 +618,32 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div id="model-based-dot-formula" class="section level2">
 <h2>Model based dot formula</h2>
 <p>For many existing models in R we usually can specify “dot formulas”, when used predictors are sourced from provided data. xspliner can also handle the form. Let’s return here for iris random forest model.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>., <span class="dt">model =</span> rf_iris)</a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>., <span class="dt">model =</span> rf_iris)</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+## stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 ##     xf(Species), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67652  -0.07571  -0.03050   0.09563   0.46918  
+## -0.66859  -0.07897  -0.02812   0.09748   0.46392  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.39649    0.25141  -5.555 1.29e-07 ***
-## xs(Sepal.Length)       0.31020    0.30086   1.031   0.3042    
-## xs(Petal.Length)       1.75429    0.37109   4.727 5.33e-06 ***
-## xf(Species)versicolor  0.08059    0.17954   0.449   0.6542    
-## xf(Species)virginica   0.40542    0.23986   1.690   0.0931 .  
+## (Intercept)           -1.38318    0.25357  -5.455 2.06e-07 ***
+## xs(Sepal.Length)       0.35122    0.30254   1.161   0.2476    
+## xs(Petal.Length)       1.70267    0.35924   4.740 5.06e-06 ***
+## xf(Species)versicolor  0.07783    0.17944   0.434   0.6651    
+## xf(Species)virginica   0.41267    0.23780   1.735   0.0848 .  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.0310788)
+## (Dispersion parameter for gaussian family taken to be 0.03103978)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5064  on 145  degrees of freedom
-## AIC: -88.088
+## Residual deviance:  4.5008  on 145  degrees of freedom
+## AIC: -88.277
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Good practice here is to provide <code>data</code> parameter as well to detect predictors classes, and model type (classification or regression).</p>
@@ -629,35 +655,35 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li>xspline provided data parameter, excluding formula response</li>
 </ul>
 <p>To assure correct predictors usage, you may also specify predictor names vector in <code>predictors</code> parameter, and data (optional) to assure source of variable classes:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>., </a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">                    <span class="dt">model =</span> rf_iris,</a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">                    <span class="dt">predictors =</span> <span class="kw">colnames</span>(iris)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)],</a>
-<a class="sourceLine" id="cb22-4" data-line-number="4">                    <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(Petal.Width <span class="op">~</span><span class="st"> </span>., </span>
+<span id="cb22-2"><a href="#cb22-2"></a>                    <span class="dt">model =</span> rf_iris,</span>
+<span id="cb22-3"><a href="#cb22-3"></a>                    <span class="dt">predictors =</span> <span class="kw">colnames</span>(iris)[<span class="op">-</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)],</span>
+<span id="cb22-4"><a href="#cb22-4"></a>                    <span class="dt">data =</span> iris)</span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+## stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 ##     xf(Species), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67652  -0.07571  -0.03050   0.09563   0.46918  
+## -0.66859  -0.07897  -0.02812   0.09748   0.46392  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.39649    0.25141  -5.555 1.29e-07 ***
-## xs(Sepal.Length)       0.31020    0.30086   1.031   0.3042    
-## xs(Petal.Length)       1.75429    0.37109   4.727 5.33e-06 ***
-## xf(Species)versicolor  0.08059    0.17954   0.449   0.6542    
-## xf(Species)virginica   0.40542    0.23986   1.690   0.0931 .  
+## (Intercept)           -1.38318    0.25357  -5.455 2.06e-07 ***
+## xs(Sepal.Length)       0.35122    0.30254   1.161   0.2476    
+## xs(Petal.Length)       1.70267    0.35924   4.740 5.06e-06 ***
+## xf(Species)versicolor  0.07783    0.17944   0.434   0.6651    
+## xf(Species)virginica   0.41267    0.23780   1.735   0.0848 .  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.0310788)
+## (Dispersion parameter for gaussian family taken to be 0.03103978)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5064  on 145  degrees of freedom
-## AIC: -88.088
+## Residual deviance:  4.5008  on 145  degrees of freedom
+## AIC: -88.277
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>In above examples each predictor is transformed by default. You can exclude needed, by specifying global <code>alter = &quot;never&quot;</code> parameters, or <code>bare</code>.</p>
@@ -668,32 +694,32 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h1>Omit formula</h1>
 <p>As we could see in previous section, using dot formula the predictors are sourced from provided black box. Why cannot we fully extract formula from black box? We can.</p>
 <p>Let’s use previously built <code>rf_iris</code> model:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(rf_iris)</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="kw">summary</span>(model_xs)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>model_xs &lt;-<span class="st"> </span><span class="kw">xspline</span>(rf_iris)</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="kw">summary</span>(model_xs)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
+## stats::glm(formula = Petal.Width ~ xs(Sepal.Length) + xs(Petal.Length) + 
 ##     xf(Species), family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -0.67652  -0.07571  -0.03050   0.09563   0.46918  
+## -0.66859  -0.07897  -0.02812   0.09748   0.46392  
 ## 
 ## Coefficients:
 ##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           -1.39649    0.25141  -5.555 1.29e-07 ***
-## xs(Sepal.Length)       0.31020    0.30086   1.031   0.3042    
-## xs(Petal.Length)       1.75429    0.37109   4.727 5.33e-06 ***
-## xf(Species)versicolor  0.08059    0.17954   0.449   0.6542    
-## xf(Species)virginica   0.40542    0.23986   1.690   0.0931 .  
+## (Intercept)           -1.38318    0.25357  -5.455 2.06e-07 ***
+## xs(Sepal.Length)       0.35122    0.30254   1.161   0.2476    
+## xs(Petal.Length)       1.70267    0.35924   4.740 5.06e-06 ***
+## xf(Species)versicolor  0.07783    0.17944   0.434   0.6651    
+## xf(Species)virginica   0.41267    0.23780   1.735   0.0848 .  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 0.0310788)
+## (Dispersion parameter for gaussian family taken to be 0.03103978)
 ## 
 ##     Null deviance: 86.5699  on 149  degrees of freedom
-## Residual deviance:  4.5064  on 145  degrees of freedom
-## AIC: -88.088
+## Residual deviance:  4.5008  on 145  degrees of freedom
+## AIC: -88.277
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>Works! Can it be simpler? Actually not because of black box based transformation and theory, but we can provide some model based parameters upfront using DALEX’s <code>explainer</code> object (see next section).</p>
@@ -703,45 +729,45 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li>Building the black box with formula</li>
 <li>Black box training data stores factors in long form (the factor is one column, not spread into binary wide form)</li>
 </ul>
-<p>Most of R based ML models satisfy the above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in the more complex xspline call. You can see it in <a href="./use_cases.html">use cases</a></p>
+<p>Most of R based ML models satisfy the above condition. One of exceptions is XGBoost which in actual xspliner version needs to be handled in the more complex xspline call. You can see it in <a href="./cases.html">use cases</a></p>
 <div id="excluding-predictors-from-transformation" class="section level2">
 <h2>Excluding predictors from transformation</h2>
 <p>For this example consider again Boston Housing Data from pdp package, and build simple <code>svm</code> model for predicting <code>chas</code> variable:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">library</span>(pdp)</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">library</span>(e1071)</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw">data</span>(boston)</a>
-<a class="sourceLine" id="cb26-4" data-line-number="4">svm_boston &lt;-<span class="st"> </span><span class="kw">svm</span>(chas <span class="op">~</span><span class="st"> </span>cmedv <span class="op">+</span><span class="st"> </span>rad <span class="op">+</span><span class="st"> </span>lstat, <span class="dt">data =</span> boston, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="kw">str</span>(boston[, <span class="st">&quot;rad&quot;</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">library</span>(pdp)</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="kw">library</span>(e1071)</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="kw">data</span>(boston)</span>
+<span id="cb26-4"><a href="#cb26-4"></a>svm_boston &lt;-<span class="st"> </span><span class="kw">svm</span>(chas <span class="op">~</span><span class="st"> </span>cmedv <span class="op">+</span><span class="st"> </span>rad <span class="op">+</span><span class="st"> </span>lstat, <span class="dt">data =</span> boston, <span class="dt">probability =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="kw">str</span>(boston[, <span class="st">&quot;rad&quot;</span>])</span></code></pre></div>
 <pre><code>##  int [1:506] 1 2 2 3 3 3 5 5 5 5 ...</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">unique</span>(boston<span class="op">$</span>rad)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">unique</span>(boston<span class="op">$</span>rad)</span></code></pre></div>
 <pre><code>## [1]  1  2  3  5  4  8  6  7 24</code></pre>
 <p>As we can see <code>rad</code> variable is integer and has only 9 unique values. As a result spline approximation may be misleading, and not possible to perform. We decide here to omit <code>rad</code> variable when performing transformation, nevertheless remaining predictors should be transformed.</p>
 <p>At first setup model based transformation:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">xs_model &lt;-<span class="st"> </span><span class="kw">xspline</span>(svm_boston)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>xs_model &lt;-<span class="st"> </span><span class="kw">xspline</span>(svm_boston)</span></code></pre></div>
 <pre><code>## Error in smooth.construct.tp.smooth.spec(object, dk$data, dk$knots): A term has fewer unique covariate combinations than specified maximum degrees of freedom</code></pre>
 <p>As we can see, the error was returned due to the form of <code>rad</code> variable.</p>
 <p>How to exclude <code>rad</code> from transformation? We can use xspline’s <code>bare</code> parameter, responsible for specifying predictor which shouldn’t be transformed.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">xs_model &lt;-<span class="st"> </span><span class="kw">xspline</span>(</a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">  svm_boston,</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">  <span class="dt">bare =</span> <span class="st">&quot;rad&quot;</span>)</a>
-<a class="sourceLine" id="cb32-4" data-line-number="4"><span class="kw">summary</span>(xs_model)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>xs_model &lt;-<span class="st"> </span><span class="kw">xspline</span>(</span>
+<span id="cb32-2"><a href="#cb32-2"></a>  svm_boston,</span>
+<span id="cb32-3"><a href="#cb32-3"></a>  <span class="dt">bare =</span> <span class="st">&quot;rad&quot;</span>)</span>
+<span id="cb32-4"><a href="#cb32-4"></a><span class="kw">summary</span>(xs_model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = chas ~ xs(cmedv) + rad + xs(lstat), family = family, 
+## stats::glm(formula = chas ~ xs(cmedv) + rad + xs(lstat), family = family, 
 ##     data = data)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -0.8193  -0.3415  -0.3391  -0.3367   2.4276  
+## -0.8194  -0.3415  -0.3391  -0.3367   2.4276  
 ## 
 ## Coefficients:
 ##               Estimate Std. Error z value Pr(&gt;|z|)   
-## (Intercept) 23.9680458 30.3303985   0.790  0.42939   
-## xs(cmedv)   23.8760057  9.2352658   2.585  0.00973 **
-## rad         -0.0008441  0.0214852  -0.039  0.96866   
-## xs(lstat)   -3.5136063 28.8592214  -0.122  0.90310   
+## (Intercept) 50.6536673 60.8526191   0.832  0.40518   
+## xs(cmedv)   48.0306874 18.5767922   2.586  0.00972 **
+## rad         -0.0008446  0.0214853  -0.039  0.96864   
+## xs(lstat)   -7.0796032 58.0517850  -0.122  0.90294   
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
@@ -759,41 +785,52 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h1>Integration with DALEX</h1>
 <p>As mentioned in the previous section, xspliner is integrated with DALEX package. The main function from the package <code>explain</code> returns useful black box data (such as bare black model or training data) that can be used by xspline function.</p>
 <p>Just check below example</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">library</span>(DALEX)</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2">rf_boston &lt;-<span class="st"> </span><span class="kw">randomForest</span>(lstat <span class="op">~</span><span class="st"> </span>cmedv <span class="op">+</span><span class="st"> </span>crim <span class="op">+</span><span class="st"> </span>chas, <span class="dt">data =</span> boston)</a>
-<a class="sourceLine" id="cb34-3" data-line-number="3">explainer &lt;-<span class="st"> </span><span class="kw">explain</span>(rf_boston, <span class="dt">label =</span> <span class="st">&quot;boston&quot;</span>)</a>
-<a class="sourceLine" id="cb34-4" data-line-number="4">model &lt;-<span class="st"> </span><span class="kw">xspline</span>(</a>
-<a class="sourceLine" id="cb34-5" data-line-number="5">  explainer</a>
-<a class="sourceLine" id="cb34-6" data-line-number="6">)</a>
-<a class="sourceLine" id="cb34-7" data-line-number="7"><span class="kw">summary</span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="kw">library</span>(DALEX)</span>
+<span id="cb34-2"><a href="#cb34-2"></a>rf_boston &lt;-<span class="st"> </span><span class="kw">randomForest</span>(lstat <span class="op">~</span><span class="st"> </span>cmedv <span class="op">+</span><span class="st"> </span>crim <span class="op">+</span><span class="st"> </span>chas, <span class="dt">data =</span> boston)</span>
+<span id="cb34-3"><a href="#cb34-3"></a>explainer &lt;-<span class="st"> </span><span class="kw">explain</span>(rf_boston, <span class="dt">label =</span> <span class="st">&quot;boston&quot;</span>)</span></code></pre></div>
+<pre><code>## Preparation of a new explainer is initiated
+##   -&gt; model label       :  boston 
+##   -&gt; data              :  506  rows  4  cols ([33mextracted from the model[39m)
+##   -&gt; target variable   :  not specified! ([31mWARNING[39m)
+##   -&gt; predict function  :  yhat.randomForest  will be used ([33mdefault[39m)
+##   -&gt; predicted values  :  numerical, min =  5.935577 , mean =  12.64471 , max =  24.89574  
+##   -&gt; residual function :  difference between y and yhat ([33mdefault[39m)
+## [32mA new explainer has been created![39m</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>model &lt;-<span class="st"> </span><span class="kw">xspline</span>(</span>
+<span id="cb36-2"><a href="#cb36-2"></a>  explainer</span>
+<span id="cb36-3"><a href="#cb36-3"></a>)</span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="kw">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = lstat ~ xs(cmedv) + xs(crim) + xf(chas), family = family, 
-##     data = data)
+## stats::glm(formula = lstat ~ xs(cmedv) + xs(crim) + xf(chas), 
+##     family = family, data = data)
 ## 
 ## Deviance Residuals: 
 ##      Min        1Q    Median        3Q       Max  
-## -11.5973   -2.3902   -0.6499    1.7778   21.2226  
+## -11.4103   -2.4020   -0.6603    1.7309   21.1970  
 ## 
 ## Coefficients:
 ##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -15.46194    1.40794 -10.982  &lt; 2e-16 ***
-## xs(cmedv)     1.61985    0.06909  23.445  &lt; 2e-16 ***
-## xs(crim)      0.58862    0.14018   4.199 3.17e-05 ***
-## xf(chas)1     1.40692    0.69515   2.024   0.0435 *  
+## (Intercept) -15.14293    1.47947 -10.235  &lt; 2e-16 ***
+## xs(cmedv)     1.62242    0.06935  23.396  &lt; 2e-16 ***
+## xs(crim)      0.56143    0.14686   3.823 0.000148 ***
+## xf(chas)1     1.40816    0.69586   2.024 0.043539 *  
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## (Dispersion parameter for gaussian family taken to be 15.4446)
+## (Dispersion parameter for gaussian family taken to be 15.47706)
 ## 
 ##     Null deviance: 25752.4  on 505  degrees of freedom
-## Residual deviance:  7753.2  on 502  degrees of freedom
-## AIC: 2827
+## Residual deviance:  7769.5  on 502  degrees of freedom
+## AIC: 2828.1
 ## 
 ## Number of Fisher Scoring iterations: 2</code></pre>
 <p>You can provide your own xspline’s parameters that overwrite that sourced from explainer.</p>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

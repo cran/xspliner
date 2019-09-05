@@ -171,10 +171,10 @@ correct_improved_components <- function(special_components_details, transformed_
 }
 
 add_special_to_predictor <- function(predictor, class, bare) {
-  if (!(class %in% c("numeric", "integer", "factor"))) {
+  if (!(class %in% c("numeric", "integer", "factor", "logical"))) {
     stop("Wrong class passed.")
   }
-  if (predictor %in% bare) {
+  if (predictor %in% bare || class == "logical") {
     return(predictor)
   }
   if (class == "factor") {
@@ -198,13 +198,17 @@ build_predictor_based_formula <- function(response, predictors, classes, bare, f
 }
 
 get_predictors_classes <- function(data) {
-  purrr::map_chr(1:ncol(data), function(x) class(data[, x]))
+  purrr::map_chr(1:ncol(data), function(x) class(data[[x]]))
 }
 
 try_get <- function(possible) {
   possible_response <- try(possible, silent = TRUE)
   if (!("try-error" %in% class(possible_response))) {
-    possible_response
+    if (length(possible_response) == 0 || identical(possible_response, "NULL")) {
+      NULL
+    } else {
+      possible_response
+    }
   } else {
     NULL
   }
@@ -224,6 +228,12 @@ get_model_response <- function(model, data, response) {
   if (is.null(response)) {
     response <- try_get(all.vars(model$terms[[2]]))
   }
+  if (is.null(response)) {
+    response <- try_get(all.vars(model$Terms[[2]]))
+  }
+  if (is.null(response)) {
+    response <- all.vars(model$call$formula[[2]])
+  }
   if (!is.null(response)) {
     response_in_data <- response %in% colnames(data)
     if (!all(response_in_data)) {
@@ -233,6 +243,7 @@ get_model_response <- function(model, data, response) {
   } else {
     stop("Cannot extract model lhs")
   }
+  log_msg(sprintf("Extracted response: %s", response))
   response
 }
 
@@ -241,17 +252,27 @@ get_model_lhs <- function(model, lhs) {
     lhs <- try_get(deparse(model$terms[[2]]))
   }
   if (is.null(lhs)) {
+    lhs <- try_get(deparse(model$Terms[[2]]))
+  }
+  if (is.null(lhs)) {
     lhs <- try_get(colnames(model.frame(model))[1])
+  }
+  if (is.null(lhs)) {
+    lhs <- try_get(deparse(model$call$formula[[2]], width.cutoff = 500))
   }
   if (is.null(lhs)) {
     stop("Cannot extract model lhs")
   }
+  log_msg(sprintf("Extracted lhs: %s", lhs))
   lhs
 }
 
 get_model_predictors <- function(model, data, predictors, response) {
   if (is.null(predictors)) {
     predictors <- try_get(all.vars(model$terms[[3]]))
+  }
+  if (is.null(predictors)) {
+    predictors <- try_get(all.vars(model$Terms[[3]]))
   }
   if (!is.null(predictors)) {
     predictors_in_data <- predictors %in% colnames(data)
@@ -262,6 +283,7 @@ get_model_predictors <- function(model, data, predictors, response) {
   } else {
     predictors <- setdiff(colnames(data), response)
   }
+  log_msg(sprintf("Extracted predictors: %s", paste0(predictors, collapse = ",")))
   predictors
 }
 
@@ -269,10 +291,13 @@ get_model_type <- function(model, data, response = NULL) {
   response <- get_model_response(model, data, response)
 
   if (inherits(data[[response]], "factor")) {
+    log_msg("Response variable of class factor. Considering classification problem.")
     type <- "classification"
   } else if (inherits(data[[response]], "integer") && (length(unique(data[[response]])) <= 2)) {
+    log_msg("Response variable of class integer with two values. Considering classification problem.")
     type <- "classification"
   } else {
+    log_msg("Considering regression problem.")
     type <- "regression"
   }
   type
@@ -295,7 +320,7 @@ get_model_family <- function(model, family, type) {
         model_family <- match.fun(family$family)
         family_name <- family$family
       }
-      message(sprintf("Cannot extract model family. Use %s.", family_name))
+      log_msg(sprintf("Cannot extract model family. Use %s.", family_name))
     }
   }
 
@@ -312,7 +337,7 @@ get_model_link <- function(model, link, type) {
       model_link <- "logit"
     } else {
       if (is.null(model_link)) {
-        message(sprintf("Cannot extract model link. Use %s.", link))
+        log_msg(sprintf("Cannot extract model link. Use %s.", link))
         model_link <- link
       }
     }

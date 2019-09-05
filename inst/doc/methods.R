@@ -16,15 +16,6 @@ newdata <- data.frame(
 predict(model_xs, newdata = newdata)
 
 ## ------------------------------------------------------------------------
-summary(model_xs)
-
-## ------------------------------------------------------------------------
-summary(model_xs, "Petal.Length")
-
-## ------------------------------------------------------------------------
-summary(model_xs, "Species")
-
-## ------------------------------------------------------------------------
 print(model_xs)
 
 ## ------------------------------------------------------------------------
@@ -53,4 +44,38 @@ plot(x, petal_length_xs(x))
 ## ------------------------------------------------------------------------
 species_xf <- transition(model_xs, predictor = "Species", type = "function")
 species_xf(c("setosa", "versicolor", "virginica"))
+
+## ------------------------------------------------------------------------
+summary(model_xs)
+
+## ------------------------------------------------------------------------
+summary(model_xs, "Petal.Length")
+
+## ------------------------------------------------------------------------
+summary(model_xs, "Species")
+
+## ------------------------------------------------------------------------
+library(xspliner)
+library(e1071)
+set.seed(1)
+data <- ISLR::Default
+default.svm <- svm(default ~ ., data = data, probability = TRUE)
+default.xs <- xspline(default ~ student + xs(balance) + xs(income), model = default.svm)
+
+## ------------------------------------------------------------------------
+prob_svm <- function(object, newdata) attr(predict(object, newdata = newdata, probability = TRUE), "probabilities")[, 2]
+prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
+
+## ------------------------------------------------------------------------
+summary(default.xs, model = default.svm, newdata = data, prediction_funs = list(prob_xs, prob_svm))
+
+## ------------------------------------------------------------------------
+response_svm <- function(object, newdata) predict(object, newdata = newdata)
+response_xs <- function(object, newdata) {
+  y_levels <- levels(newdata[[environment(object)$response]])
+  factor(y_levels[(predict.glm(object, newdata = newdata, type = "link") > 0) + 1], levels = y_levels)
+}
+
+## ------------------------------------------------------------------------
+summary(default.xs, model = default.svm, newdata = data, prediction_funs = list(response_xs, response_svm))
 

@@ -23,7 +23,7 @@ plot_quantitative <- function(x, variable_name, plot_response, plot_approx, data
   transition_fun <- transition(x, variable_name, "function")
 
   if (plot_data) {
-    plot_range <- range(data[, variable_name])
+    plot_range <- range(data[[variable_name]])
   } else {
     plot_range <- attr(transition_fun, "variable_range")
   }
@@ -103,13 +103,17 @@ utils::globalVariables(c("Observation", "Model", "Value"))
 
 plot_model_comparison <- function(x, model, data, compare_with, prediction_functions, sort_by = NULL) {
   model_name <- rev(as.character(model$call[[1]]))[1]
-  compare_with[[model_name]] <- model
-  compare_with$xspliner <- x
+  models_list <- list(xspliner = x)
+  models_list[[model_name]] <- model
+  models_list <- append(models_list, compare_with)
   if (length(prediction_functions) == 1) {
-    fitted <- compare_with %>%
+    fitted <- models_list %>%
       purrr::map(~ prediction_functions[[1]](., data))
   } else {
-    fitted <- compare_with %>%
+    if (length(models_list) != length(prediction_functions)) {
+      stop("prediction_functions should provide prediction functions for all models (surrogate, original and model to compare), or common one.")
+    }
+    fitted <- models_list %>%
       purrr::map2(prediction_functions, function(model, pred_fun) pred_fun(model, data))
   }
 
@@ -119,13 +123,22 @@ plot_model_comparison <- function(x, model, data, compare_with, prediction_funct
     fitted_values <- fitted_values[order(fitted_values[[sort_by]]), ]
   }
 
-  fitted_values %>%
+  fitted_values <- fitted_values %>%
     dplyr::mutate(Observation = 1:nrow(.)) %>%
-    tidyr::gather(key = "Model", value = "Value", -Observation) %>%
+    tidyr::gather(key = "Model", value = "Value", -Observation)
+
+  heatmap_plot <- fitted_values %>%
     ggplot2::ggplot(ggplot2::aes(Observation, Model)) +
     ggplot2::geom_tile(ggplot2::aes(fill = Value)) +
     ggplot2::theme_minimal()
 
+  if (is.character(fitted_values$Value) || is.factor(fitted_values$Value)) {
+    colors <- c("#990033", "#0033CC")
+    names(colors) <- levels(fitted$xspliner)
+    heatmap_plot <- heatmap_plot +
+      ggplot2::scale_fill_manual(values = colors)
+  }
+  heatmap_plot
 }
 
 plot_specials_grid <- function(x, vars, plot_response, plot_approx, data, plot_data, plot_deriv) {

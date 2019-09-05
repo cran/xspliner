@@ -80,7 +80,7 @@ xspline.formula <- function(object, model, data = NULL, consider = "specials", e
   model_lhs <- get_model_lhs(model, NULL)
   if (model_lhs != formula_lhs) {
     message("Model and formula lhs's must be the same. Using lhs from model.")
-    object[[2]] <- model$terms[[2]]
+    object[[2]] <- model_lhs
   }
 
   model_predictors <- get_model_predictors(model, data, NULL, get_model_response(model, data, NULL))
@@ -124,9 +124,11 @@ xspline.explainer <- function(object, env = parent.frame(), ...) {
 #' @param env Environment in which optional variables passed into parameters are stored.
 #' @param compare_stat Function of linear model (lm function output). Statistic that measures if linear model is better
 #'   that transformed one. See \link{stats}.
+#' @param control Fitting settings. See \link{glm.control}.
+#' @param ... Another parameters passed from chosen method. Not used.
 #'
 build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_opts = xs_opts_default, link = "identity",
-                           family = "gaussian", env = parent.frame(), compare_stat = aic) {
+                           family = "gaussian", env = parent.frame(), compare_stat = aic, control, ...) {
   formula_environment <- new.env(parent = env)
   attr(formula, ".Environment") <- formula_environment
   formula_metadata <- get_formula_metadata(formula, extract_formula_var_names(formula, data))
@@ -135,10 +137,15 @@ build_xspliner <- function(formula, model, data, xf_opts = xf_opts_default, xs_o
   model_link <- get_model_link(model, link, type)
   family <- model_family(link = model_link)
   cleared_formula <- transformed_formula_object(formula_metadata, model, data, family, xs_opts, xf_opts, compare_stat)
-  glm_model <- glm(cleared_formula, data = data, family = family)
+  if (!missing(control)) {
+    glm_model <- stats::glm(cleared_formula, data = data, family = family, control = control)
+  } else {
+    glm_model <- stats::glm(cleared_formula, data = data, family = family)
+  }
   environment(glm_model) <- attr(cleared_formula, ".Environment")
   class(glm_model) <- c("xspliner", class(glm_model))
   glm_model$call[[2]] <- cleared_formula
+  attr(glm_model, "type") <- type
   glm_model
 }
 
@@ -197,6 +204,6 @@ hoslem <- function(glm_model) {
   if (glm_model$family$family != "binomial") {
     stop("Not classification model.")
   }
-  ResourceSelection::hoslem.test(glm_model$model[, 1], fitted(glm_model))$statistic
+  ResourceSelection::hoslem.test(glm_model$model[[1]], fitted(glm_model))$statistic
 }
 attr(hoslem, "higher-better") <- TRUE

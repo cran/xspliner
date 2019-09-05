@@ -44,12 +44,31 @@ prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "
 
 ## ------------------------------------------------------------------------
 plot(model_xs, model = model_svm, data = iris_data,
-     prediction_funs = list(prob_svm, prob_xs)
+     prediction_funs = list(prob_xs, prob_svm)
 )  
 
 ## ------------------------------------------------------------------------
 plot(model_xs, model = model_svm, data = iris_data,
-     prediction_funs = list(prob_svm, prob_xs),
+     prediction_funs = list(prob_xs, prob_svm),
+     sort_by = "svm"
+)  
+
+## ------------------------------------------------------------------------
+class_svm <- function(object, newdata) predict(object, newdata = newdata)
+response_levels <- levels(iris_data$Species)
+class_xs <- function(object, newdata) {
+  probs <- predict(object, newdata = newdata, type = "response")
+  factor(ifelse(probs > 0.5, response_levels[2], response_levels[1]), levels = response_levels)
+}
+
+## ------------------------------------------------------------------------
+plot(model_xs, model = model_svm, data = iris_data,
+     prediction_funs = list(class_xs, class_svm)
+)  
+
+## ------------------------------------------------------------------------
+plot(model_xs, model = model_svm, data = iris_data,
+     prediction_funs = list(class_xs, class_svm),
      sort_by = "svm"
 )  
 
