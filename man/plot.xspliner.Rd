@@ -7,12 +7,12 @@
 \method{plot}{xspliner}(x, variable_names = NULL, model = NULL,
   plot_response = TRUE, plot_approx = TRUE, data = NULL,
   plot_data = FALSE, plot_deriv = FALSE, n_plots = 6,
-  sort_by = NULL, compare_with = list(),
+  sort_by = NULL, use_coeff = TRUE, compare_with = list(),
   prediction_funs = list(function(object, newdata) predict(object,
   newdata)), ...)
 }
 \arguments{
-\item{x}{Object of class 'xspliner'}
+\item{x}{Object of class 'xspliner'.}
 
 \item{variable_names}{Names of predictors which transitions should be plotted.}
 
@@ -32,6 +32,8 @@
 
 \item{sort_by}{When comparing models determines according to which model should observations be ordered.}
 
+\item{use_coeff}{If TRUE both PDP function and its approximation is scaled with corresponding surrogate model coefficient.}
+
 \item{compare_with}{Named list. Other models that should be compared with xspliner and \code{model}.}
 
 \item{prediction_funs}{Prediction functions that should be used in model comparison.}
@@ -39,5 +41,6 @@
 \item{...}{Another arguments passed into model specific method.}
 }
 \description{
-Plot method for 'xspliner' model
+The method provides all plotting methods offered by 'xspliner' package.
+See \link{plot_variable_transition} and \link{plot_model_comparison} for more details.
 }

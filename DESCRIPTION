@@ -1,7 +1,7 @@
 Package: xspliner
 Title: Assisted Model Building, using Surrogate Black-Box Models to
         Train Interpretable Spline Based Additive Models
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: c(
   person("Krystian", "Igras", email = "krystian8207@gmail.com", role = c("aut", "cre")),
   person("Przemyslaw", "Biecek", role =  c("aut", "ths")))
@@ -22,9 +22,9 @@ VignetteBuilder: knitr
 URL: https://ModelOriented.github.io/xspliner/
 BugReports: https://github.com/ModelOriented/xspliner/issues
 NeedsCompilation: no
-Packaged: 2019-09-04 23:23:55 UTC; krystian
+Packaged: 2019-09-24 21:12:57 UTC; krystian
 Author: Krystian Igras [aut, cre],
   Przemyslaw Biecek [aut, ths]
 Maintainer: Krystian Igras <krystian8207@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-09-05 04:40:02 UTC
+Date/Publication: 2019-09-25 20:20:02 UTC

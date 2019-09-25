@@ -19,7 +19,7 @@ summary(model_xs)
 summary(model_xs, "salary")
 
 ## ------------------------------------------------------------------------
-plot(model_xs, "salary")
+plot_variable_transition(model_xs, "salary")
 
 ## ------------------------------------------------------------------------
 iris_data <- droplevels(iris[iris$Species != "setosa", ])
@@ -36,5 +36,5 @@ model_xs <- xspline(Species ~  xs(Sepal.Length) + xs(Sepal.Width) + xs(Petal.Len
 summary(model_xs)
 
 ## ------------------------------------------------------------------------
-plot(model_xs, "Petal.Width")
+plot_variable_transition(model_xs, "Petal.Width")
 

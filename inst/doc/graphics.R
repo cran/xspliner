@@ -12,17 +12,23 @@ boston.rf <- randomForest(cmedv ~ lstat + ptratio + age, data = boston)
 library(xspliner)
 model_xs <- xspline(cmedv ~ xs(lstat) + xs(ptratio) + age, model = boston.rf)
 
-## ------------------------------------------------------------------------
-plot(model_xs, "lstat")
+## ----eval = FALSE--------------------------------------------------------
+#  plot(model_xs, "lstat")
 
 ## ------------------------------------------------------------------------
-plot(model_xs, "lstat", data = boston, plot_data = TRUE)
+plot_variable_transition(model_xs, "lstat")
 
 ## ------------------------------------------------------------------------
-plot(model_xs, "lstat", plot_deriv = TRUE)
+plot_variable_transition(model_xs, "lstat", data = boston, plot_data = TRUE)
 
 ## ------------------------------------------------------------------------
-plot(model_xs, "ptratio", plot_response = FALSE, plot_deriv = TRUE)
+plot_variable_transition(model_xs, "lstat", plot_deriv = TRUE)
+
+## ------------------------------------------------------------------------
+plot_variable_transition(model_xs, "ptratio", plot_response = FALSE, plot_deriv = TRUE)
+
+## ----eval = FALSE--------------------------------------------------------
+#  plot_model_comparison(model_xs, model = boston.rf, data = boston)
 
 ## ------------------------------------------------------------------------
 plot(model_xs, model = boston.rf, data = boston)
@@ -43,12 +49,12 @@ prob_svm <- function(object, newdata) attr(predict(object, newdata = newdata, pr
 prob_xs <- function(object, newdata) predict(object, newdata = newdata, type = "response")
 
 ## ------------------------------------------------------------------------
-plot(model_xs, model = model_svm, data = iris_data,
+plot_model_comparison(model_xs, model = model_svm, data = iris_data,
      prediction_funs = list(prob_xs, prob_svm)
 )  
 
 ## ------------------------------------------------------------------------
-plot(model_xs, model = model_svm, data = iris_data,
+plot_model_comparison(model_xs, model = model_svm, data = iris_data,
      prediction_funs = list(prob_xs, prob_svm),
      sort_by = "svm"
 )  
@@ -62,12 +68,12 @@ class_xs <- function(object, newdata) {
 }
 
 ## ------------------------------------------------------------------------
-plot(model_xs, model = model_svm, data = iris_data,
+plot_model_comparison(model_xs, model = model_svm, data = iris_data,
      prediction_funs = list(class_xs, class_svm)
 )  
 
 ## ------------------------------------------------------------------------
-plot(model_xs, model = model_svm, data = iris_data,
+plot_model_comparison(model_xs, model = model_svm, data = iris_data,
      prediction_funs = list(class_xs, class_svm),
      sort_by = "svm"
 )  
@@ -85,18 +91,18 @@ model_xs <- xspline(Ozone ~ xs(Solar.R) + xs(Wind) + xs(Temp), model_rf, data = 
 model_glm <- glm(Ozone ~ ., data = ozone)
 model_gam <- mgcv::gam(Ozone ~ s(Solar.R) + s(Wind) + s(Temp), data = ozone)
 
-plot(model_xs, 
+plot_model_comparison(model_xs, 
      model = model_rf, 
      data = ozone, 
      compare_with = list(glm = model_glm, gam = model_gam),
      sort_by = "xspliner")
 
 ## ----fig.width = 9.5-----------------------------------------------------
-plot(model_xs)
+plot_variable_transition(model_xs)
 
 ## ----fig.width = 9.5-----------------------------------------------------
-plot(model_xs, n_plots = 2)
+plot_variable_transition(model_xs, n_plots = 2)
 
 ## ----fig.width = 9.5-----------------------------------------------------
-plot(model_xs, c("Wind", "Temp"))
+plot_variable_transition(model_xs, c("Wind", "Temp"))
 

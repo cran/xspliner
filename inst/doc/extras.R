@@ -59,7 +59,7 @@ model_rf <- randomForest(log(y) ~ x + z, data = data)
 ## ----message = FALSE-----------------------------------------------------
 model_xs <- xspline(model_rf)
 summary(model_xs)
-plot(model_xs, model = model_rf, data = data)
+plot_model_comparison(model_xs, model = model_rf, data = data)
 
 ## ----message = FALSE-----------------------------------------------------
 x <- rnorm(100)
@@ -71,17 +71,17 @@ model_rf <- randomForest(y ~ x + z, data = data)
 ## ----message = FALSE-----------------------------------------------------
 model_xs <- xspline(y ~ x * z, model = model_rf)
 summary(model_xs)
-plot(model_xs, model = model_rf, data = data)
+plot_model_comparison(model_xs, model = model_rf, data = data)
 
 ## ----message = FALSE-----------------------------------------------------
 model_xs <- xspline(model_rf, form = "multiplicative")
 summary(model_xs)
-plot(model_xs, model = model_rf, data = data)
+plot_model_comparison(model_xs, model = model_rf, data = data)
 
 ## ----message = FALSE-----------------------------------------------------
 model_xs <- xspline(y ~ ., model = model_rf, form = "multiplicative")
 summary(model_xs)
-plot(model_xs, model = model_rf, data = data)
+plot_model_comparison(model_xs, model = model_rf, data = data)
 
 ## ----message = FALSE-----------------------------------------------------
 library(randomForest)
@@ -94,10 +94,10 @@ varImpPlot(model_rf)
 ## ----message = FALSE-----------------------------------------------------
 model_xs <- xspline(Ozone ~ xs(Wind) + xs(Temp), model = model_rf)
 summary(model_xs)
-plot(model_xs, model = model_rf, data = air)
+plot_model_comparison(model_xs, model = model_rf, data = air)
 
 ## ----message = FALSE-----------------------------------------------------
 model_xs <- xspline(Ozone ~ xs(Wind) * xs(Temp), model = model_rf)
 summary(model_xs)
-plot(model_xs, model = model_rf, data = air)
+plot_model_comparison(model_xs, model = model_rf, data = air)
 

@@ -34,12 +34,16 @@ model_ale <- xspline(
 )
 
 ## ----fig.width=3, fig.height=3, echo = FALSE, fig.show='hold'------------
-plot(model_pdp, "ptratio", plot_approx = FALSE, plot_deriv = FALSE) + guides(colour = FALSE) + labs(title = "Partial Dependence Plot")
-plot(model_ale, "ptratio", plot_approx = FALSE, plot_deriv = FALSE) + guides(colour = FALSE) + labs(title = "Accumulated Local Effects Plot")
+plot_variable_transition(model_pdp, "ptratio", plot_approx = FALSE, plot_deriv = FALSE) + guides(colour = FALSE) +
+  labs(title = "Partial Dependence Plot")
+plot_variable_transition(model_ale, "ptratio", plot_approx = FALSE, plot_deriv = FALSE) + guides(colour = FALSE) +
+  labs(title = "Accumulated Local Effects Plot")
 
 ## ----fig.width=3, fig.height=3, echo = FALSE, fig.show='hold'------------
-plot(model_pdp, "ptratio", plot_deriv = FALSE) + guides(colour = FALSE) + labs(title = "Partial Dependence Plot")
-plot(model_ale, "ptratio", plot_deriv = FALSE) + guides(colour = FALSE) + labs(title = "Accumulated Local Effects Plot")
+plot_variable_transition(model_pdp, "ptratio", plot_deriv = FALSE) + guides(colour = FALSE) + 
+  labs(title = "Partial Dependence Plot")
+plot_variable_transition(model_ale, "ptratio", plot_deriv = FALSE) + guides(colour = FALSE) + 
+  labs(title = "Accumulated Local Effects Plot")
 
 ## ------------------------------------------------------------------------
 data(boston)
@@ -66,5 +70,5 @@ xp_model <- xspline(
 summary(xp_model)
 
 ## ------------------------------------------------------------------------
-plot(xp_model, "nox")
+plot_variable_transition(xp_model, "nox")
 
